@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { ChevronLeft, ChevronRight, MessageCircle, ShieldCheck, User, ClipboardList, Eye, AlertCircle, Info, BarChart3, HelpCircle } from 'lucide-react';
+import { ChevronLeft, ChevronRight, MessageCircle, ShieldCheck, User, ClipboardList, Eye, AlertCircle, Info, BarChart3, HelpCircle, Home, CheckCircle2 } from 'lucide-react';
 
-const App = () => {
+const NursingExperience = ({ onBack }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [showNotes, setShowNotes] = useState(false);
 
@@ -21,9 +21,9 @@ const App = () => {
         <div className="flex flex-col items-center justify-center space-y-8 text-center">
           <p className="text-3xl text-slate-400 line-through">不是解決問題</p>
           <div className="flex items-center space-x-4">
-            <div className="h-1 w-12 bg-orange-500"></div>
-            <p className="text-6xl font-bold text-orange-500">看見問題</p>
-            <div className="h-1 w-12 bg-orange-500"></div>
+            <div className="h-1 w-12 bg-blue-600"></div>
+            <p className="text-6xl font-bold text-blue-600">看見問題</p>
+            <div className="h-1 w-12 bg-blue-600"></div>
           </div>
         </div>
       ),
@@ -37,15 +37,15 @@ const App = () => {
       content: (
         <ul className="space-y-6 text-2xl">
           <li className="flex items-center space-x-4">
-            <span className="flex-shrink-0 w-8 h-8 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center">✔</span>
+            <CheckCircle2 className="w-8 h-8 text-emerald-600 flex-shrink-0" />
             <span>不需寫名字</span>
           </li>
           <li className="flex items-center space-x-4">
-            <span className="flex-shrink-0 w-8 h-8 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center">✔</span>
+            <CheckCircle2 className="w-8 h-8 text-emerald-600 flex-shrink-0" />
             <span>不評論他人</span>
           </li>
           <li className="flex items-center space-x-4">
-            <span className="flex-shrink-0 w-8 h-8 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center">✔</span>
+            <CheckCircle2 className="w-8 h-8 text-emerald-600 flex-shrink-0" />
             <span>分享的是經驗，不是對錯</span>
           </li>
         </ul>
@@ -143,13 +143,13 @@ const App = () => {
       title: "👥 小組交流",
       content: (
         <div className="space-y-8 text-3xl">
-          <div className="flex items-center space-x-6 p-6 bg-orange-50 rounded-xl border-l-8 border-orange-400">
+          <div className="flex items-center space-x-6 p-6 bg-blue-50 rounded-xl border-l-8 border-blue-400">
             <span className="text-4xl">👉</span>
             <p className="font-bold">每人分享一張</p>
           </div>
-          <div className="flex items-center space-x-6 p-6 bg-orange-50 rounded-xl border-l-8 border-orange-400">
+          <div className="flex items-center space-x-6 p-6 bg-blue-50 rounded-xl border-l-8 border-blue-400">
             <span className="text-4xl">👉</span>
-            <p className="font-bold text-orange-600">選一個最有感的</p>
+            <p className="font-bold text-blue-600">選一個最有感的</p>
           </div>
         </div>
       ),
@@ -233,8 +233,8 @@ const App = () => {
             <p className="text-4xl">不是個別事件</p>
           </div>
           <div className="flex items-center space-x-6">
-            <Info className="w-12 h-12 text-orange-500" />
-            <p className="text-6xl font-black text-orange-600">而是會被傳承的文化</p>
+            <Info className="w-12 h-12 text-blue-600" />
+            <p className="text-6xl font-black text-blue-600">而是會被傳承的文化</p>
           </div>
         </div>
       ),
@@ -280,19 +280,8 @@ const App = () => {
     }
   ];
 
-  const nextSlide = () => {
-    if (currentSlide < slides.length - 1) {
-      setCurrentSlide(currentSlide + 1);
-      setShowNotes(false);
-    }
-  };
-
-  const prevSlide = () => {
-    if (currentSlide > 0) {
-      setCurrentSlide(currentSlide - 1);
-      setShowNotes(false);
-    }
-  };
+  const nextSlide = () => { if (currentSlide < slides.length - 1) { setCurrentSlide(currentSlide + 1); setShowNotes(false); } };
+  const prevSlide = () => { if (currentSlide > 0) { setCurrentSlide(currentSlide - 1); setShowNotes(false); } };
 
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -304,46 +293,40 @@ const App = () => {
   }, [currentSlide]);
 
   const slide = slides[currentSlide];
+  const isDarkBg = slide.bg.includes('900') || slide.bg.includes('black') || slide.bg.includes('950');
 
   return (
-    <div className={`min-h-screen ${slide.bg} transition-colors duration-500 flex flex-col font-sans overflow-hidden text-slate-900`}>
-      {/* Top Progress Bar */}
-      <div className="fixed top-0 left-0 w-full h-1 bg-slate-200 z-50">
-        <div 
-          className="h-full bg-blue-500 transition-all duration-300" 
-          style={{ width: `${((currentSlide + 1) / slides.length) * 100}%` }}
-        />
+    <div className={`fixed inset-0 ${slide.bg} transition-colors duration-700 flex flex-col font-sans overflow-y-auto text-slate-900 z-50`}>
+      <div className="fixed top-0 left-0 w-full h-1.5 bg-slate-200/20 z-50">
+        <div className="h-full bg-blue-600 transition-all duration-300" style={{ width: `${((currentSlide + 1) / slides.length) * 100}%` }} />
       </div>
 
-      {/* Header / Navigation Info */}
-      <header className="px-8 py-6 flex justify-between items-center">
+      <header className="px-8 py-6 flex justify-between items-center z-10 mt-2">
         <div className="flex items-center space-x-3">
-          <div className="w-3 h-3 rounded-full bg-red-500"></div>
-          <span className="text-sm font-medium tracking-widest text-slate-400 uppercase">Nursing Culture Workshop</span>
+          <div className="w-3 h-3 rounded-full bg-blue-600"></div>
+          <span className={`text-sm font-bold tracking-widest uppercase ${isDarkBg ? 'text-slate-400' : 'text-slate-500'}`}>Part 1: Nursing Experience</span>
         </div>
-        <div className="text-sm font-bold text-slate-400">
+        <div className="text-xs font-bold text-slate-400 border border-slate-200/30 px-3 py-1 rounded-full">
           {currentSlide + 1} / {slides.length}
         </div>
       </header>
 
-      {/* Main Slide Content */}
       <main className="flex-1 flex flex-col items-center justify-center px-12 relative">
         <div className="w-full max-w-6xl animate-in fade-in slide-in-from-bottom-4 duration-700 flex flex-col items-center">
-          
           {slide.type === "cover" ? (
             <div className="text-center text-white space-y-8 py-12">
-              <h1 className="text-8xl md:text-9xl font-black tracking-tighter mb-4 animate-in zoom-in duration-1000">
+              <h1 className="text-6xl md:text-8xl font-black tracking-tighter mb-4 animate-in zoom-in duration-1000">
                 {slide.title}
               </h1>
-              <p className="text-2xl md:text-3xl font-light text-slate-400 tracking-widest">
+              <p className="text-2xl md:text-4xl font-light text-slate-400 tracking-widest">
                 {slide.subtitle}
               </p>
-              <div className="h-1 w-24 bg-blue-500 mx-auto mt-12"></div>
+              <div className="h-1.5 w-32 bg-blue-600 mx-auto mt-12"></div>
             </div>
           ) : (
             <>
-              {slide.icon && <div className="mb-4">{slide.icon}</div>}
-              <h2 className="text-4xl md:text-5xl font-black mb-12 text-center leading-tight">
+              {slide.icon && <div className="mb-6">{slide.icon}</div>}
+              <h2 className={`text-4xl md:text-6xl font-black mb-12 text-center leading-tight ${isDarkBg ? 'text-white' : 'text-slate-800'}`}>
                 {slide.title}
               </h2>
               <div className="w-full flex justify-center">
@@ -354,57 +337,50 @@ const App = () => {
         </div>
       </main>
 
-      {/* Footer Controls */}
       <footer className="px-8 py-8 flex justify-between items-end relative z-40">
         <div className="flex space-x-4">
-          <button 
-            onClick={prevSlide}
-            disabled={currentSlide === 0}
-            className={`p-4 rounded-full transition-all ${currentSlide === 0 ? 'text-slate-300' : 'bg-white shadow-lg text-slate-800 hover:scale-110 active:scale-95'}`}
-          >
+          <button onClick={onBack} className={`flex items-center space-x-2 px-6 py-4 rounded-full transition-all shadow-lg font-bold text-sm mr-4 ${isDarkBg ? 'bg-white/10 text-white hover:bg-white/20 border border-white/20' : 'bg-white text-slate-700 hover:bg-slate-50 border border-slate-200'}`}>
+            <Home size={20} />
+            <span>返回大廳</span>
+          </button>
+          <button onClick={prevSlide} disabled={currentSlide === 0} className={`p-4 rounded-full transition-all ${currentSlide === 0 ? 'opacity-20 text-slate-400' : 'bg-white shadow-xl text-slate-800 hover:scale-110 active:scale-95'}`}>
             <ChevronLeft size={24} />
           </button>
-          <button 
-            onClick={nextSlide}
-            disabled={currentSlide === slides.length - 1}
-            className={`p-4 rounded-full transition-all ${currentSlide === slides.length - 1 ? 'text-slate-300' : 'bg-white shadow-lg text-slate-800 hover:scale-110 active:scale-95'}`}
-          >
+          <button onClick={nextSlide} disabled={currentSlide === slides.length - 1} className={`p-4 rounded-full transition-all ${currentSlide === slides.length - 1 ? 'opacity-20 text-slate-400' : 'bg-white shadow-xl text-slate-800 hover:scale-110 active:scale-95'}`}>
             <ChevronRight size={24} />
           </button>
         </div>
 
         <div className="relative">
-          <button 
-            onClick={() => setShowNotes(!showNotes)}
-            className={`flex items-center space-x-2 px-6 py-3 rounded-full font-bold transition-all shadow-md ${showNotes ? 'bg-orange-500 text-white' : 'bg-white text-slate-600 hover:bg-slate-50'}`}
-          >
+          <button onClick={() => setShowNotes(!showNotes)} className={`flex items-center space-x-2 px-6 py-4 rounded-full font-bold transition-all shadow-lg ${showNotes ? 'bg-blue-600 text-white' : 'bg-white text-slate-600 hover:bg-slate-50 border border-slate-200'}`}>
             <MessageCircle size={20} />
-            <span>💬 講者備註</span>
+            <span className="text-sm">講者備註</span>
           </button>
-
           {showNotes && (
-            <div className="absolute bottom-full right-0 mb-4 w-72 p-6 bg-slate-900 text-slate-100 rounded-3xl shadow-2xl border border-slate-700 animate-in slide-in-from-bottom-2 fade-in">
-              <div className="text-xs font-bold text-orange-400 mb-2 uppercase tracking-widest">Presenter Notes</div>
-              <p className="text-lg leading-relaxed">{slide.notes}</p>
+            <div className="absolute bottom-full right-0 mb-4 w-80 p-6 bg-slate-900 text-slate-100 rounded-3xl shadow-2xl border border-slate-700 animate-in slide-in-from-bottom-2 fade-in text-left">
+              <div className="text-xs font-bold text-blue-400 mb-2 uppercase tracking-widest flex items-center">
+                <div className="w-2 h-2 bg-blue-500 rounded-full mr-2"></div>
+                Presenter Guide
+              </div>
+              <p className="text-lg leading-relaxed font-medium">{slide.notes}</p>
             </div>
           )}
         </div>
       </footer>
 
-      {/* Styles for animation */}
       <style dangerouslySetInnerHTML={{ __html: `
         @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
         @keyframes slide-in-from-bottom-4 { from { transform: translateY(1rem); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
         @keyframes zoom-in { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        @keyframes slide-in-from-bottom-2 { from { transform: translateY(0.5rem); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
         .animate-in { animation: var(--anim-name) var(--anim-duration, 500ms) ease-out forwards; }
         .fade-in { --anim-name: fade-in; }
         .slide-in-from-bottom-4 { --anim-name: slide-in-from-bottom-4; }
         .slide-in-from-bottom-2 { --anim-name: slide-in-from-bottom-2; }
         .zoom-in { --anim-name: zoom-in; }
-        @keyframes slide-in-from-bottom-2 { from { transform: translateY(0.5rem); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
       `}} />
     </div>
   );
 };
 
-export default App;
+export default NursingExperience;

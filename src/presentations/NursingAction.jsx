@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { ChevronLeft, ChevronRight, MessageCircle, Play, Film, Users, Target, Clock, Eye, Lightbulb, UserCheck, Star, ArrowRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, MessageCircle, Play, Film, Users, Target, Clock, Eye, Lightbulb, UserCheck, Star, ArrowRight, Home } from 'lucide-react';
 
-const App = () => {
+const NursingAction = ({ onBack }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [showNotes, setShowNotes] = useState(false);
 
@@ -252,19 +252,8 @@ const App = () => {
     }
   ];
 
-  const nextSlide = () => {
-    if (currentSlide < slides.length - 1) {
-      setCurrentSlide(currentSlide + 1);
-      setShowNotes(false);
-    }
-  };
-
-  const prevSlide = () => {
-    if (currentSlide > 0) {
-      setCurrentSlide(currentSlide - 1);
-      setShowNotes(false);
-    }
-  };
+  const nextSlide = () => { if (currentSlide < slides.length - 1) { setCurrentSlide(currentSlide + 1); setShowNotes(false); } };
+  const prevSlide = () => { if (currentSlide > 0) { setCurrentSlide(currentSlide - 1); setShowNotes(false); } };
 
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -276,45 +265,41 @@ const App = () => {
   }, [currentSlide]);
 
   const slide = slides[currentSlide];
+  const isDarkBg = slide.bg.includes('900') || slide.bg.includes('black') || slide.bg.includes('950');
 
   return (
-    <div className={`min-h-screen ${slide.bg} transition-colors duration-500 flex flex-col font-sans overflow-hidden text-slate-900`}>
-      {/* Progress */}
-      <div className="fixed top-0 left-0 w-full h-1 bg-slate-200/20 z-50">
-        <div 
-          className="h-full bg-yellow-500 transition-all duration-300" 
-          style={{ width: `${((currentSlide + 1) / slides.length) * 100}%` }}
-        />
+    <div className={`fixed inset-0 ${slide.bg} transition-colors duration-700 flex flex-col font-sans overflow-y-auto text-slate-900 z-50`}>
+      <div className="fixed top-0 left-0 w-full h-1.5 bg-slate-200/20 z-50">
+        <div className="h-full bg-yellow-500 transition-all duration-300" style={{ width: `${((currentSlide + 1) / slides.length) * 100}%` }} />
       </div>
 
-      <header className="px-8 py-6 flex justify-between items-center z-10">
+      <header className="px-8 py-6 flex justify-between items-center z-10 mt-2">
         <div className="flex items-center space-x-3">
           <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
-          <span className="text-sm font-bold tracking-widest text-slate-500 uppercase">Part 2: New Cinema Paradiso</span>
+          <span className={`text-sm font-bold tracking-widest uppercase ${isDarkBg ? 'text-slate-400' : 'text-slate-500'}`}>Part 2: New Cinema Paradiso</span>
         </div>
-        <div className="px-3 py-1 bg-white/10 backdrop-blur rounded text-xs font-bold text-slate-400 border border-white/20">
-          Slide {currentSlide + 1} of {slides.length}
+        <div className="text-xs font-bold text-slate-400 border border-slate-200/30 px-3 py-1 rounded-full">
+          {currentSlide + 1} / {slides.length}
         </div>
       </header>
 
       <main className="flex-1 flex flex-col items-center justify-center px-12 relative">
         <div className="w-full max-w-6xl animate-in fade-in slide-in-from-bottom-4 duration-700 flex flex-col items-center">
-          
           {slide.type === "cover" ? (
             <div className="text-center text-white space-y-8 py-12">
               <Film className="w-20 h-20 text-yellow-500 mx-auto mb-6 opacity-80" />
-              <h1 className="text-8xl md:text-9xl font-black tracking-tighter mb-4">
+              <h1 className="text-6xl md:text-8xl font-black tracking-tighter mb-4 animate-in zoom-in duration-1000">
                 {slide.title}
               </h1>
               <p className="text-2xl md:text-4xl font-light text-slate-400 tracking-widest">
                 {slide.subtitle}
               </p>
-              <div className="h-1 w-24 bg-yellow-500 mx-auto mt-12"></div>
+              <div className="h-1.5 w-32 bg-yellow-500 mx-auto mt-12"></div>
             </div>
           ) : (
             <>
-              {slide.icon && <div className="mb-4">{slide.icon}</div>}
-              <h2 className={`text-4xl md:text-6xl font-black mb-16 text-center leading-tight ${slide.bg === 'bg-slate-900' ? 'text-white' : 'text-slate-900'}`}>
+              {slide.icon && <div className="mb-6">{slide.icon}</div>}
+              <h2 className={`text-4xl md:text-6xl font-black mb-12 text-center leading-tight ${isDarkBg ? 'text-white' : 'text-slate-800'}`}>
                 {slide.title}
               </h2>
               <div className="w-full flex justify-center">
@@ -327,33 +312,25 @@ const App = () => {
 
       <footer className="px-8 py-8 flex justify-between items-end relative z-40">
         <div className="flex space-x-4">
-          <button 
-            onClick={prevSlide}
-            disabled={currentSlide === 0}
-            className={`p-4 rounded-full transition-all ${currentSlide === 0 ? 'opacity-20 text-slate-400' : 'bg-white shadow-xl text-slate-800 hover:scale-110 active:scale-95'}`}
-          >
+          <button onClick={onBack} className={`flex items-center space-x-2 px-6 py-4 rounded-full transition-all shadow-lg font-bold text-sm mr-4 ${isDarkBg ? 'bg-white/10 text-white hover:bg-white/20 border border-white/20' : 'bg-white text-slate-700 hover:bg-slate-50 border border-slate-200'}`}>
+            <Home size={20} />
+            <span>返回大廳</span>
+          </button>
+          <button onClick={prevSlide} disabled={currentSlide === 0} className={`p-4 rounded-full transition-all ${currentSlide === 0 ? 'opacity-20 text-slate-400' : 'bg-white shadow-xl text-slate-800 hover:scale-110 active:scale-95'}`}>
             <ChevronLeft size={24} />
           </button>
-          <button 
-            onClick={nextSlide}
-            disabled={currentSlide === slides.length - 1}
-            className={`p-4 rounded-full transition-all ${currentSlide === slides.length - 1 ? 'opacity-20 text-slate-400' : 'bg-white shadow-xl text-slate-800 hover:scale-110 active:scale-95'}`}
-          >
+          <button onClick={nextSlide} disabled={currentSlide === slides.length - 1} className={`p-4 rounded-full transition-all ${currentSlide === slides.length - 1 ? 'opacity-20 text-slate-400' : 'bg-white shadow-xl text-slate-800 hover:scale-110 active:scale-95'}`}>
             <ChevronRight size={24} />
           </button>
         </div>
 
         <div className="relative">
-          <button 
-            onClick={() => setShowNotes(!showNotes)}
-            className={`flex items-center space-x-2 px-6 py-3 rounded-full font-bold transition-all shadow-md ${showNotes ? 'bg-yellow-500 text-slate-900' : 'bg-white text-slate-600 hover:bg-slate-50'}`}
-          >
+          <button onClick={() => setShowNotes(!showNotes)} className={`flex items-center space-x-2 px-6 py-4 rounded-full font-bold transition-all shadow-lg ${showNotes ? 'bg-yellow-500 text-slate-900' : 'bg-white text-slate-600 hover:bg-slate-50 border border-slate-200'}`}>
             <MessageCircle size={20} />
-            <span>💬 講者備註</span>
+            <span className="text-sm">講者備註</span>
           </button>
-
           {showNotes && (
-            <div className="absolute bottom-full right-0 mb-4 w-80 p-6 bg-slate-900 text-slate-100 rounded-3xl shadow-2xl border border-slate-700 animate-in slide-in-from-bottom-2 fade-in">
+            <div className="absolute bottom-full right-0 mb-4 w-80 p-6 bg-slate-900 text-slate-100 rounded-3xl shadow-2xl border border-slate-700 animate-in slide-in-from-bottom-2 fade-in text-left">
               <div className="text-xs font-bold text-yellow-500 mb-2 uppercase tracking-widest flex items-center">
                 <div className="w-2 h-2 bg-yellow-500 rounded-full mr-2"></div>
                 Presenter Guide
@@ -366,15 +343,17 @@ const App = () => {
 
       <style dangerouslySetInnerHTML={{ __html: `
         @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes slide-in-from-bottom-4 { from { transform: translateY(2rem); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-        @keyframes slide-in-from-bottom-2 { from { transform: translateY(1rem); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-        .animate-in { animation: var(--anim-name) var(--anim-duration, 600ms) cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        @keyframes slide-in-from-bottom-4 { from { transform: translateY(1rem); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        @keyframes zoom-in { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        @keyframes slide-in-from-bottom-2 { from { transform: translateY(0.5rem); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .animate-in { animation: var(--anim-name) var(--anim-duration, 500ms) ease-out forwards; }
         .fade-in { --anim-name: fade-in; }
         .slide-in-from-bottom-4 { --anim-name: slide-in-from-bottom-4; }
         .slide-in-from-bottom-2 { --anim-name: slide-in-from-bottom-2; }
+        .zoom-in { --anim-name: zoom-in; }
       `}} />
     </div>
   );
 };
 
-export default App;
+export default NursingAction;
